@@ -1,0 +1,36 @@
+---
+on:
+  workflow_call:
+    inputs:
+      add-paths:
+        description: "Paths to "
+        required: false
+        type: string
+
+      org:
+        description: "The organisation for this"
+        required: false
+        default: "SUSE"
+        type: string
+
+      image-version:
+        decription: |
+            The version of the image to use for the workflow
+            (usually 'ubuntu-latest')
+        default: "ubuntu-latest"
+        required: false
+        type: string
+
+    secrets:
+      deploy-key:
+        description: "The deploy key for successful HTML builds"
+        required: true
+        type: string
+
+jobs:
+  print-username:
+    runs-on: ${{ inputs.image-version }}
+
+    steps:
+      - name: Print the input name to STDOUT
+        run: echo The image is ${{ inputs.image-version }}

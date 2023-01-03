@@ -19,6 +19,12 @@ on:
         default: "ubuntu-latest"
         type: string
 
+      build-html:
+        description: "Should HTML be built?"
+        required: false
+        default: true
+        type: boolean
+
     # secrets:
     #  deploy-key:
     #    description: "The deploy key for successful HTML builds"
@@ -35,6 +41,7 @@ jobs:
             echo image=${{ inputs.image-version }}
             echo repository=${{ github.repository }}
             echo action=${{ github.action }}
+            echo triggering_actor=${{ github.triggering_actor }}
 
   select-dc-files:
     runs-on: ${{ inputs.image-version }}
@@ -105,3 +112,4 @@ jobs:
           path: ${{ steps.build-dc.outputs.artifact-dir }}/*
           retention-days: 3
 
+  # no publish step, this is just a proof of concept

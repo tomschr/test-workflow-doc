@@ -26,7 +26,7 @@ on:
     #    type: string
 
 jobs:
-  print:
+  debug:
     runs-on: ${{ inputs.image-version }}
 
     steps:
@@ -34,4 +34,51 @@ jobs:
         run: echo The image is ${{ inputs.image-version }}
 
       - name: Print the GH repo
-        run: echo ${{ github.repository }}
+        run:
+            echo repository=${{ github.repository }}
+            echo action=${{ github.action }}
+
+  select-dc-files:
+    runs-on: ${{ inputs.image-version }}
+    needs: debug
+    outputs:
+      validate-list: ${{ steps.select-dc-validate.outputs.dc-list }}
+      build-list: ${{ steps.select-dc-build.outputs.dc-list }}
+      allow-build: ${{ steps.select-dc-build.outputs.allow-build }}
+      relevant-branches: ${{ steps.select-dc-build.outputs.relevant-branches }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Checking basic soundness of DC files
+        uses: openSUSE/doc-ci@gha-select-dcs
+        with:
+          mode: soundness
+
+      - name: Selecting DC files to validate
+        id: select-dc-validate
+        uses: openSUSE/doc-ci@gha-select-dcs
+        with:
+          mode: list-validate
+
+      - name: Selecting DC files to build
+        id: select-dc-build
+        uses: openSUSE/doc-ci@gha-select-dcs
+        with:
+          mode: list-build
+          original-org: ${{ inputs.org }}
+
+  validate:
+    runs-on: ${{ inputs.image-version }}
+    needs: select-dc-files
+    strategy:
+      # don't cancel all validation runners when one of them fails, we want full results
+      fail-fast: false
+      matrix:
+        dc-files: ${{ fromJson(needs.select-dc-files.outputs.validate-list) }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validating DC file(s) ${{ matrix.dc-files }}
+        uses: openSUSE/doc-ci@gha-validate
+        with:
+          dc-files: ${{ matrix.dc-files }}

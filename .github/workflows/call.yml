@@ -1,15 +1,15 @@
 ---
 on:
   push:
-    paths:
-      - 'DC-*'
-      - 'xml/**'
-      - 'adoc/**'
-      - 'images/src/**'
-      - '**/DC-*'
-      - '**/xml/**'
-      - '**/adoc/**'
-      - '**/images/src/**'
+    # paths:
+    #  - 'DC-*'
+    #  - 'xml/**'
+    #  - 'adoc/**'
+    #  - 'images/src/**'
+    #  - '**/DC-*'
+    #  - '**/xml/**'
+    #  - '**/adoc/**'
+    #  - '**/images/src/**'
 
 jobs:
   call-workflow-in-local-repo:

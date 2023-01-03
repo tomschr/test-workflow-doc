@@ -1,0 +1,16 @@
+---
+on:
+  push:
+    paths:
+      - 'DC-*'
+      - 'xml/**'
+      - 'adoc/**'
+      - 'images/src/**'
+      - '**/DC-*'
+      - '**/xml/**'
+      - '**/adoc/**'
+      - '**/images/src/**'
+
+jobs:
+  call-workflow-in-local-repo:
+    uses: ./.github/workflows/workflow_call.yml@workflow-call

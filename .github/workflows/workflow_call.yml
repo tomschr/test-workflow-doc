@@ -18,11 +18,11 @@ on:
         required: false
         type: string
 
-    secrets:
-      deploy-key:
-        description: "The deploy key for successful HTML builds"
-        required: true
-        type: string
+    # secrets:
+    #  deploy-key:
+    #    description: "The deploy key for successful HTML builds"
+    #    required: false
+    #    type: string
 
 jobs:
   print-username:

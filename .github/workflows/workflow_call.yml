@@ -14,10 +14,7 @@ on:
         type: string
 
       image-version:
-        decription: |
-            The version of the image to use for the workflow
-            (usually 'ubuntu-latest')
-        default: "ubuntu-latest"
+        decription: "The version of the image to use for the workflow (usually 'ubuntu-latest') sefault: "ubuntu-latest"
         required: false
         type: string
 

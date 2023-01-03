@@ -16,7 +16,7 @@ on:
       image-version:
         description: "The version of the image to use for the workflow"
         required: false
-        default: "ubunut-latest"
+        default: "ubuntu-latest"
         type: string
 
     # secrets:
@@ -26,9 +26,12 @@ on:
     #    type: string
 
 jobs:
-  print-username:
+  print:
     runs-on: ${{ inputs.image-version }}
 
     steps:
-      - name: Print the input name to STDOUT
+      - name: Print the image name
         run: echo The image is ${{ inputs.image-version }}
+
+      - name: Print the GH repo
+        run: echo ${{ github.repository }}

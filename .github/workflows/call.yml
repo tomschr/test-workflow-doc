@@ -12,5 +12,5 @@ on:
     #  - '**/images/src/**'
 
 jobs:
-  call-workflow-in-local-repo:
+  validate-and-build:
     uses: tomschr/test-workflow-doc/.github/workflows/workflow_call.yml@workflow-call

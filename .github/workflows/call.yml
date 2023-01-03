@@ -13,4 +13,4 @@ on:
 
 jobs:
   call-workflow-in-local-repo:
-    uses: ./.github/workflows/workflow_call.yml@workflow-call
+    uses: tomschr/test-workflow-doc/.github/workflows/workflow_call.yml@workflow-call

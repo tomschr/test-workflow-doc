@@ -30,11 +30,9 @@ jobs:
     runs-on: ${{ inputs.image-version }}
 
     steps:
-      - name: Print the image name
-        run: echo The image is ${{ inputs.image-version }}
-
-      - name: Print the GH repo
-        run:
+      - name: Print some context
+        run: |
+            echo image=${{ inputs.image-version }}
             echo repository=${{ github.repository }}
             echo action=${{ github.action }}
 
@@ -82,3 +80,28 @@ jobs:
         uses: openSUSE/doc-ci@gha-validate
         with:
           dc-files: ${{ matrix.dc-files }}
+
+  build-html:
+    runs-on: ${{ inputs.image-version }}
+    needs: [select-dc-files, validate]
+    if: ${{ needs.select-dc-files.outputs.allow-build == 'true' }}
+    outputs:
+      artifact-name: ${{ steps.build-dc.outputs.artifact-name }}
+      artifact-dir: ${{ steps.build-dc.outputs.artifact-dir }}
+    strategy:
+      matrix:
+        dc-files: ${{ fromJson(needs.select-dc-files.outputs.build-list) }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building DC file(s) ${{ matrix.dc-files }}
+        id: build-dc
+        uses: openSUSE/doc-ci@gha-build
+        with:
+          dc-files: ${{ matrix.dc-files }}
+      - name: Uploading builds as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.build-dc.outputs.artifact-name }}
+          path: ${{ steps.build-dc.outputs.artifact-dir }}/*
+          retention-days: 3
+
